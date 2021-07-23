@@ -1,3 +1,8 @@
 lane :test do
-  periphery
+  periphery(executable: 'bin/periphery_2_8_0', config: 'fixtures/MyProject/.periphery.yml')
+end
+
+lane :test_from_xcodebuild do
+  xcodebuild(project: 'fixtures/MyProject/MyProject.xcodeproj', scheme: 'MyProject', derivedDataPath: './tmp/derivedData/')
+  periphery(executable: 'bin/periphery_2_8_0', config: 'fixtures/MyProject/.periphery.yml', skip_build: true)
 end

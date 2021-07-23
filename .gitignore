@@ -1,6 +1,9 @@
 *.gem
 Gemfile.lock
 
+## macOS
+.DS_Store
+
 ## Documentation cache and generated files:
 /.yardoc/
 /_yardoc/
@@ -10,3 +13,7 @@ fastlane/README.md
 fastlane/report.xml
 coverage
 test-results
+
+## Custom
+tmp/
+build/
