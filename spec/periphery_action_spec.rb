@@ -101,6 +101,9 @@ describe Fastlane::Actions::PeripheryAction do
         # Expect the derived data path to exist
         expect(File).to receive(:exist?).with('/foo/bar/derivedData/').and_return(true)
 
+        # Allow Helper to return false for testing Xcode 13's case
+        allow(FastlaneCore::Helper).to receive(:xcode_at_least?).with('14.0.0').and_return(false)
+
         Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::SCAN_DERIVED_DATA_PATH] = '/foo/bar/derivedData/'
         Fastlane::Actions::PeripheryAction.run({
           executable: executable,
@@ -108,7 +111,7 @@ describe Fastlane::Actions::PeripheryAction do
         })
       end
 
-      it 'finds --index-store-path using derived data from XCODEBUILD_DERIVED_DATA_PATH' do
+      it 'finds --index-store-path using derived data from XCODEBUILD_DERIVED_DATA_PATH with Xcode 13' do
         # Expect the command to be invoked with the --skip-build and correct --index-store-path arguments
         expect(Fastlane::Actions).to receive(:sh_control_output)
           .with([executable, 'scan', '--disable-update-check', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar/derivedData/Index/DataStore'], anything)
@@ -116,6 +119,28 @@ describe Fastlane::Actions::PeripheryAction do
 
         # Expect the derived data path to exist
         expect(File).to receive(:exist?).with('/foo/bar/derivedData/').and_return(true)
+
+        # Allow Helper to return false for testing Xcode 13's case
+        allow(FastlaneCore::Helper).to receive(:xcode_at_least?).with('14.0.0').and_return(false)
+
+        Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_DERIVED_DATA_PATH] = '/foo/bar'
+        Fastlane::Actions::PeripheryAction.run({
+          executable: executable,
+          skip_build: true
+        })
+      end
+
+      it 'finds --index-store-path using derived data from XCODEBUILD_DERIVED_DATA_PATH with Xcode 14' do
+        # Expect the command to be invoked with the --skip-build and correct --index-store-path arguments
+        expect(Fastlane::Actions).to receive(:sh_control_output)
+          .with([executable, 'scan', '--disable-update-check', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar/derivedData/Index.noindex/DataStore'], anything)
+          .and_return("[]")
+
+        # Expect the derived data path to exist
+        expect(File).to receive(:exist?).with('/foo/bar/derivedData/').and_return(true)
+
+        # Allow Helper to return false for testing Xcode 14's case
+        allow(FastlaneCore::Helper).to receive(:xcode_at_least?).with('14.0.0').and_return(true)
 
         Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::XCODEBUILD_DERIVED_DATA_PATH] = '/foo/bar'
         Fastlane::Actions::PeripheryAction.run({
