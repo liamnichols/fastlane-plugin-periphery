@@ -1,4 +1,5 @@
 require 'fastlane/action'
+require 'fastlane_core/helper'
 
 module Fastlane
   module Actions
@@ -103,10 +104,18 @@ module Fastlane
 
           # Alternatively, use the derived data path defined by a prior action
           derived_data_path = find_derived_data_path
-          return File.join(derived_data_path, 'Index', 'DataStore') unless derived_data_path.nil?
 
           # Fail if we couldn't automatically resolve the path
-          UI.user_error!("The index store path could not be resolved. Either specify it using the index_store_path argument or provide a path to derived data when using build_app or xcodebuild actions.")
+          if derived_data_path.nil?
+            UI.user_error!("The index store path could not be resolved. Either specify it using the index_store_path argument or provide a path to derived data when using build_app or xcodebuild actions.")
+          end
+
+          # https://github.com/peripheryapp/periphery#xcode
+          if Helper.xcode_at_least?("14.0.0")
+            return File.join(derived_data_path, 'Index.noindex', 'DataStore')
+          else
+            return File.join(derived_data_path, 'Index', 'DataStore')
+          end
         end
 
         def find_derived_data_path
