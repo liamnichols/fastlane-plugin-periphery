@@ -24,6 +24,19 @@ module Fastlane
         end
       end
 
+      # fastlane dumps the 'Lane Context' when an action fails
+      # Because the results array can contain thousands of items,
+      # we don't want to dump them all in the console.
+      # Instead, use a custom array which limits the output
+      #
+      # https://github.com/liamnichols/fastlane-plugin-periphery/issues/2
+      class Results < Array
+        def to_s
+          return super.to_s if length < 2
+          "[#{first.inspect}, ...] (#{length} items)"
+        end
+      end
+
       class Runner
         attr_reader :executable, :config, :skip_build, :index_store_path, :results
 
@@ -67,7 +80,7 @@ module Fastlane
           })
 
           # Decode the JSON output and assign to the property/lane_context
-          @results = JSON.parse(output).map { |raw| Result.new(raw) }
+          @results = Results.new(JSON.parse(output).map { |raw| Result.new(raw) })
           Actions.lane_context[SharedValues::PERIPHERY_RESULTS] = results
         end
 
