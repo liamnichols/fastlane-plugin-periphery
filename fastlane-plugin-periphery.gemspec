@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = 'liam.nichols.ln@gmail.com'
 
   spec.summary       = 'Identifies unused code in Swift projects using Periphery'
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-periphery"
+  spec.homepage      = "https://github.com/liamnichols/fastlane-plugin-periphery"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
