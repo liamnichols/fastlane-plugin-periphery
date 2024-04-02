@@ -66,7 +66,7 @@ describe Fastlane::Actions::PeripheryAction do
       it 'can process results json' do
         # Expect the command to return json results
         expect(Fastlane::Actions).to receive(:sh_control_output)
-          .with([executable, 'scan', '--disable-update-check', '--format', 'json'], anything)
+          .with([executable, 'scan', '--disable-update-check', '--quiet', '--format', 'json'], anything)
           .and_return(json)
 
         result = Fastlane::Actions::PeripheryAction.run({
@@ -80,7 +80,7 @@ describe Fastlane::Actions::PeripheryAction do
       it 'sets --skip-build when index_store_path is specified' do
         # Expect the command to be invoked with the --skip-build and correct --index-store-path arguments
         expect(Fastlane::Actions).to receive(:sh_control_output)
-          .with([executable, 'scan', '--disable-update-check', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar'], anything)
+          .with([executable, 'scan', '--disable-update-check', '--quiet', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar'], anything)
           .and_return("[]")
 
         # Expect index_store_path to exist
@@ -95,7 +95,7 @@ describe Fastlane::Actions::PeripheryAction do
       it 'finds --index-store-path using derived data from SCAN_DERIVED_DATA_PATH' do
         # Expect the command to be invoked with the --skip-build and correct --index-store-path arguments
         expect(Fastlane::Actions).to receive(:sh_control_output)
-          .with([executable, 'scan', '--disable-update-check', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar/derivedData/Index/DataStore'], anything)
+          .with([executable, 'scan', '--disable-update-check', '--quiet', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar/derivedData/Index/DataStore'], anything)
           .and_return("[]")
 
         # Expect the derived data path to exist
@@ -114,7 +114,7 @@ describe Fastlane::Actions::PeripheryAction do
       it 'finds --index-store-path using derived data from XCODEBUILD_DERIVED_DATA_PATH with Xcode 13' do
         # Expect the command to be invoked with the --skip-build and correct --index-store-path arguments
         expect(Fastlane::Actions).to receive(:sh_control_output)
-          .with([executable, 'scan', '--disable-update-check', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar/derivedData/Index/DataStore'], anything)
+          .with([executable, 'scan', '--disable-update-check', '--quiet', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar/derivedData/Index/DataStore'], anything)
           .and_return("[]")
 
         # Expect the derived data path to exist
@@ -133,7 +133,7 @@ describe Fastlane::Actions::PeripheryAction do
       it 'finds --index-store-path using derived data from XCODEBUILD_DERIVED_DATA_PATH with Xcode 14' do
         # Expect the command to be invoked with the --skip-build and correct --index-store-path arguments
         expect(Fastlane::Actions).to receive(:sh_control_output)
-          .with([executable, 'scan', '--disable-update-check', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar/derivedData/Index.noindex/DataStore'], anything)
+          .with([executable, 'scan', '--disable-update-check', '--quiet', '--format', 'json', '--skip-build', '--index-store-path', '/foo/bar/derivedData/Index.noindex/DataStore'], anything)
           .and_return("[]")
 
         # Expect the derived data path to exist
@@ -152,7 +152,7 @@ describe Fastlane::Actions::PeripheryAction do
       it 'prioritises index_store_path when derrived data exists in lane_context' do
         # Expect the command to be invoked with the --skip-build and correct --index-store-path arguments
         expect(Fastlane::Actions).to receive(:sh_control_output)
-          .with([executable, 'scan', '--disable-update-check', '--format', 'json', '--skip-build', '--index-store-path', '/path/to/index_store'], anything)
+          .with([executable, 'scan', '--disable-update-check', '--quiet', '--format', 'json', '--skip-build', '--index-store-path', '/path/to/index_store'], anything)
           .and_return("[]")
 
         # Expect the index store directory to exist
@@ -171,7 +171,7 @@ describe Fastlane::Actions::PeripheryAction do
       it 'supports a custom config file location' do
         # Expect the command to raise an error
         expect(Fastlane::Actions).to receive(:sh_control_output)
-          .with([executable, 'scan', '--disable-update-check', '--format', 'json', '--config', '/path/to/periphery.yml'], anything)
+          .with([executable, 'scan', '--disable-update-check', '--quiet', '--format', 'json', '--config', '/path/to/periphery.yml'], anything)
           .and_return("[]")
 
         # Expect that the config file exists
