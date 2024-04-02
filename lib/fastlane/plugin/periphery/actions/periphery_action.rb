@@ -90,6 +90,7 @@ module Fastlane
             executable,
             'scan',
             '--disable-update-check',
+            '--quiet',
             '--format',
             'json'
           ]
